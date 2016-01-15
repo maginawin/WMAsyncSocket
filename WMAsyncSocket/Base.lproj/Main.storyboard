@@ -80,6 +80,17 @@
                                     <action selector="sendBrightnessValue:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wkb-Al-Opc"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8J5-kM-oNI">
+                                <rect key="frame" x="156" y="164" width="191" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Naj-vc-boD"/>
+                                    <constraint firstAttribute="width" constant="191" id="QUj-ox-MdV"/>
+                                </constraints>
+                                <state key="normal" title="Scan WIFI nearby"/>
+                                <connections>
+                                    <action selector="scanWiFiNearby:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bVy-rs-hO9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -87,6 +98,7 @@
                             <constraint firstItem="jc4-le-9cG" firstAttribute="top" secondItem="Fsp-Za-1xk" secondAttribute="bottom" constant="22" id="Euu-ey-plA"/>
                             <constraint firstItem="EmK-Ym-jk2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="F9a-q3-e0T"/>
                             <constraint firstItem="EmK-Ym-jk2" firstAttribute="top" secondItem="yHo-Re-87n" secondAttribute="bottom" constant="8" id="GIQ-2s-S9b"/>
+                            <constraint firstItem="8J5-kM-oNI" firstAttribute="leading" secondItem="sG0-JP-uns" secondAttribute="trailing" constant="8" id="Gqf-5E-47r"/>
                             <constraint firstItem="jc4-le-9cG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="PU8-QP-xB6"/>
                             <constraint firstItem="yHo-Re-87n" firstAttribute="top" secondItem="sG0-JP-uns" secondAttribute="bottom" constant="25" id="Uao-5X-cA4"/>
                             <constraint firstItem="Fsp-Za-1xk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="Vjd-gx-YG2"/>
@@ -96,6 +108,7 @@
                             <constraint firstItem="yHo-Re-87n" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="cRb-eV-xGg"/>
                             <constraint firstItem="sG0-JP-uns" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="jmF-Yq-IR0"/>
                             <constraint firstItem="Fsp-Za-1xk" firstAttribute="top" secondItem="AyA-pl-UTb" secondAttribute="bottom" constant="16" id="vP0-Dq-MER"/>
+                            <constraint firstItem="8J5-kM-oNI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="144" id="zbK-NM-epL"/>
                         </constraints>
                     </view>
                     <connections>

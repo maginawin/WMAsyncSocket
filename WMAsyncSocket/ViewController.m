@@ -35,6 +35,33 @@
     [_brightnessValueTextField resignFirstResponder];
 }
 
+- (IBAction)scanWiFiNearby:(id)sender {
+    NSData *firstData = [@"HF-A11ASSISTHREAD" dataUsingEncoding:NSASCIIStringEncoding];
+    
+    NSError *err;
+    if (!_tcpSocket.isConnected) {
+        [_tcpSocket connectToHost:@"10.10.100.254" onPort:8899 error:&err];
+    }
+    
+    for (int i = 0; i < 30; i++) {
+         [_tcpSocket writeData:firstData withTimeout:-1 tag:0];
+    }
+    
+    NSData *secondData = [@"+ok" dataUsingEncoding:NSASCIIStringEncoding];
+//    for (int j = 0; j < 3; j++) {
+        [_tcpSocket writeData:secondData withTimeout:-1 tag:0];
+//    }
+    
+    unsigned const char thirdBytes[] = {0x41, 0x54, 0x2B, 0x57, 0x53, 0x43, 0x41, 0x4E, 0x0D};
+    
+//    NSData *thirdData = [@"AT+WSCAN000" dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *thirdData = [NSData dataWithBytes:thirdBytes length:9];
+    
+    for (int k = 0; k < 3; k++) {
+        [_tcpSocket writeData:thirdData withTimeout:-1 tag:0];
+    }
+}
+
 - (IBAction)sendBrightnessValue:(id)sender {
     if (_brightnessValueTextField.text.length < 1) {
         return;
@@ -119,12 +146,21 @@
         
         if (i == 29) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                NSData *secondData = [@"+ok" dataUsingEncoding:NSASCIIStringEncoding];
+                
+//                for (int j = 0; j < 3; j++) {
+                    [_udpSocket sendData:secondData toHost:host port:port withTimeout:-1 tag:0];
+//                }
+                
+                
+                
                 // the last
-                if (_lamps.count > 0) {
-                    [self closeUDPSocket];
-                    
-                    [self setupTCPSocketWithLamp:_lamps.firstObject];
-                }
+//                if (_lamps.count > 0) {
+//                    [self closeUDPSocket];
+//                    
+//                    [self setupTCPSocketWithLamp:_lamps.firstObject];
+//                }
             });
         }
     }
@@ -143,13 +179,24 @@
 }
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
-    NSString *receiveStr = [NSString stringWithCString:data.bytes encoding:NSASCIIStringEncoding];
+    NSString *receiveStr = [NSString stringWithCString:data.bytes encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"receive %@", receiveStr);
     
     NSString *regEx = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(.?)){4},[0-9A-Z]{12},[0-9A-Z]*";
     NSRange receiveRange = [receiveStr rangeOfString:regEx options:NSRegularExpressionSearch];
     
     if (receiveRange.location == NSNotFound) {
-        NSLog(@"normal udp receive %@", receiveStr);
+        
+        if ([receiveStr isEqualToString:@"+ok"]) {
+            NSMutableData *thirdData = [NSMutableData dataWithData:[@"AT+WSCAN" dataUsingEncoding:NSASCIIStringEncoding]];
+//            NSData *thirdData = [@"AT+WSCAN" dataUsingEncoding:NSASCIIStringEncoding];
+            int add = 13;
+            [thirdData appendBytes:&add length:1];
+            
+            [_udpSocket sendData:thirdData toHost:@"10.10.100.255" port:48899 withTimeout:-1 tag:0];
+        }
+        
     } else {
         NSArray *lampsInfos = [receiveStr componentsSeparatedByString:@","];
         
